@@ -1,53 +1,85 @@
-// SecondSection.tsx
 "use client";
-import React, { useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 
 const profiles = [
   {
-    name: "Hiring Manager",
+    name: "The Talent Scout",
     image: "/Profiles/netflix-profile-pictures-5yup5hd2i60x7ew3.jpg",
-    locked: true,
+    locked: false,
     path: "/hiring-manager",
+    description:
+      "For recruiters and HR professionals actively seeking candidates",
   },
   {
-    name: "Team Lead",
-    image: "/Profiles/netflix-profile-pictures-1000-x-1000-62wgyitks6f4l79m.jpg",
-    locked: true,
+    name: "The Visionary Architect",
+    image:
+      "/Profiles/netflix-profile-pictures-1000-x-1000-62wgyitks6f4l79m.jpg",
+    locked: false,
     path: "/team-lead",
+    description:
+      "For hiring managers or founders looking to build a team or a new product",
   },
   {
-    name: "Recruiter",
-    image: "/Profiles/netflix-profile-pictures-1000-x-1000-88wkdmjrorckekha.jpg",
+    name: "The Collaboration Seeker",
+    image:
+      "/Profiles/netflix-profile-pictures-1000-x-1000-88wkdmjrorckekha.jpg",
     locked: false,
     path: "/recruiter",
+    description:
+      "For team leads or fellow developers interested in joint projects",
   },
   {
-    name: "HR Panel",
-    image: "/Profiles/netflix-profile-pictures-1000-x-1000-qo9h82134t9nv0j0.jpg",
-    isChildren: true,
+    name: "The Opportunity Navigator",
+    image:
+      "/Profiles/netflix-profile-pictures-1000-x-1000-qo9h82134t9nv0j0.jpg",
+    isChildren: false,
     path: "/hr-panel",
+    description: "For anyone exploring new possibilities or partnerships",
   },
 ];
 
 export default function SecondSection() {
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const router = useRouter();
-
-  const handleTap = (index: number) => {
-    setHoveredIndex((prev) => (prev === index ? null : index));
-  };
+  const [popupAlignment, setPopupAlignment] = useState<
+    "left" | "center" | "right"
+  >("center");
+  const profileRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   const handleProfileClick = (profile: any) => {
     router.push(profile.path);
   };
 
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+
+  const togglePopup = (index: number) => {
+    if (isMobile) {
+      setActiveIndex(activeIndex === index ? null : index);
+      return;
+    }
+
+    const el = profileRefs.current[index];
+    if (el) {
+      const rect = el.getBoundingClientRect();
+      const vw = window.innerWidth;
+
+      if (rect.left < 100) {
+        setPopupAlignment("left");
+      } else if (vw - rect.right < 100) {
+        setPopupAlignment("right");
+      } else {
+        setPopupAlignment("center");
+      }
+
+      setActiveIndex(activeIndex === index ? null : index);
+    }
+  };
+
   return (
-    <div
-      id="second-section"
-      className="w-full min-h-screen bg-black text-white px-4 py-12 transition-opacity duration-700 relative"
-    >
-      {hoveredIndex !== null && (
+    <div className="w-full min-h-[60vh] bg-black text-white font-[Alata] px-4 py-8 sm:py-12 transition-opacity duration-700 relative">
+      {activeIndex !== null && (
         <div className="absolute inset-0 backdrop-blur-lg bg-black/30 z-0 transition duration-300" />
       )}
 
@@ -56,62 +88,107 @@ export default function SecondSection() {
           Who's watching?
         </h1>
 
-        <div className="flex flex-wrap justify-center gap-6 sm:gap-8">
+        <div className="flex flex-wrap justify-center gap-6 sm:gap-8 relative">
           {profiles.map((profile, index) => {
-            const isBlurred = hoveredIndex !== null && hoveredIndex !== index;
-            const isActive = hoveredIndex === index;
+            const isBlurred = activeIndex !== null && activeIndex !== index;
+            const isActive = activeIndex === index;
 
             return (
-              <button
+              <div
                 key={index}
-                onClick={() => handleProfileClick(profile)}
-                className={`flex flex-col items-center transform-gpu transition-all duration-300 
-                  focus:outline-none ${
-                    isBlurred ? "blur-md scale-[0.95] opacity-60" : ""
-                  }`}
-                onMouseEnter={() => setHoveredIndex(index)}
-                onMouseLeave={() => setHoveredIndex(null)}
-                onTouchStart={() => handleTap(index)}
-                aria-label={`Select ${profile.name} profile`}
+                ref={(el) => {
+                  profileRefs.current[index] = el;
+                }}
+                className="relative w-[45%] sm:w-auto min-h-[180px] flex justify-center"
+                onMouseEnter={() => {
+                  if (!isMobile) {
+                    togglePopup(index); // updated to use position
+                  }
+                }}
+                onMouseLeave={() => !isMobile && setActiveIndex(null)}
+                onClick={() => togglePopup(index)}
               >
-                <div
-                  className={`w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 rounded-md overflow-hidden 
-                    cursor-pointer transition-transform duration-300 hover:scale-105
-                    border-2 ${isActive ? "border-white" : "border-transparent"}
-                    shadow-[0_0_12px_rgba(255,255,255,0.7)] hover:shadow-[0_0_25px_rgba(255,255,255,1)] 
-                    bg-black`}
+                <button
+                  onClick={() => !isMobile && handleProfileClick(profile)}
+                  className={`flex flex-col items-center transition-all duration-300 focus:outline-none ${
+                    isBlurred ? "blur-sm opacity-60 scale-[0.95]" : ""
+                  }`}
                 >
-                  <img
-                    src={profile.image}
-                    alt={profile.name}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <p className="mt-2 text-sm sm:text-base">{profile.name}</p>
-
-                {profile.locked && (
-                  <svg
-                    className="w-4 h-4 mt-1 text-gray-300"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                    aria-hidden="true"
+                  <div
+                    className={`w-20 h-20 sm:w-24 sm:h-24 md:w-32 md:h-32 rounded-md overflow-hidden 
+  border-2 ${isActive ? "border-white" : "border-transparent"} shadow-lg
+  bg-black transform transition-transform duration-300 hover:scale-105`}
                   >
-                    <path
-                      fillRule="evenodd"
-                      d="M10 2a4 4 0 00-4 4v2H5a2 2 0 00-2 2v7a2 2 0 002 
-                      2h10a2 2 0 002-2v-7a2 2 0 00-2-2h-1V6a4 4 0 
-                      00-4-4zM8 6a2 2 0 114 0v2H8V6z"
-                      clipRule="evenodd"
+                    <img
+                      src={profile.image}
+                      alt={profile.name}
+                      className="w-full h-full object-cover"
                     />
-                  </svg>
-                )}
-              </button>
+                  </div>
+                  <p className="mt-2 text-sm sm:text-base">{profile.name}</p>
+
+                  {profile.locked && (
+                    <svg
+                      className="w-4 h-4 mt-1 text-gray-300"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      aria-hidden="true"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M10 2a4 4 0 00-4 4v2H5a2 2 0 00-2 2v7a2 2 0 
+                        002 2h10a2 2 0 002-2v-7a2 2 0 00-2-2h-1V6a4 
+                        4 0 00-4-4zM8 6a2 2 0 114 0v2H8V6z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  )}
+                </button>
+
+                {/* Pop-up window under profile */}
+                <AnimatePresence>
+                  {isActive && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.3 }}
+                      className={`z-50
+  ${
+    isMobile
+      ? `fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[85vw] text-sm leading-snug p-4 whitespace-normal break-words`
+      : `absolute top-full mt-3 w-[85vw] sm:w-80 text-sm leading-relaxed p-4
+      ${
+        popupAlignment === "left"
+          ? "left-0 translate-x-0"
+          : popupAlignment === "right"
+          ? "right-0 translate-x-0"
+          : "left-1/2 -translate-x-1/2"
+      }`
+  }
+  bg-[#e50914] border border-black text-white rounded-xl shadow-xl`}
+                    >
+                      {isMobile && (
+                        <button
+                          onClick={() => setActiveIndex(null)}
+                          className="absolute top-2 right-3 text-white text-xl font-bold"
+                        >
+                          ×
+                        </button>
+                      )}
+                      <strong>{profile.name}:</strong> {profile.description}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             );
           })}
         </div>
 
-        <button className="mt-12 border border-gray-400 px-4 py-2 text-sm rounded hover:bg-white hover:text-black transition-colors">
-          Manage Profiles
+        <button className="relative overflow-hidden mt-12 border border-gray-400 px-4 py-2 text-sm rounded hover:text-white hover:border-transparent group transition-colors">
+          <span className="absolute inset-0 bg-[#e50914] transform scale-0 group-hover:scale-150 origin-center rounded-full transition-transform duration-500 ease-out"></span>
+
+          <span className="relative z-10">Contact Me</span>
         </button>
       </div>
     </div>
