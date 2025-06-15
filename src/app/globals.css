@@ -1,40 +1,603 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@font-face {
+  font-family: "Alata";
+  src: url("/fonts/Alata-Regular.woff2") format("woff2"), url("/fonts/Alata-Regular.woff") format("woff"),
+    url("/fonts/Alata-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+.font-alata {
+  font-family: "Alata", sans-serif;
+}
+
+/* Netflix Portfolio Enhancements - Only applied to specific components */
+.netflix-portfolio {
+  /* Show cursor on mobile/tablet */
+  @media (max-width: 1023px) {
+    cursor: auto !important;
+  }
+
+  /* Hide cursor on desktop for custom cursor */
+  @media (min-width: 1024px) {
+    cursor: none;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+.netflix-portfolio .animate-fade-in {
+  animation: netflixFadeIn 1s ease-out forwards;
+  opacity: 0;
 }
 
-
-@font-face {
-  font-family: 'Alata'; /* This is the name you'll use in your CSS */
-  src: url('/fonts/Alata-Regular.woff2') format('woff2'), /* Prefer woff2 for modern browsers */
-       url('/fonts/Alata-Regular.woff') format('woff'),   /* Fallback for older browsers */
-       url('/fonts/Alata-Regular.ttf') format('truetype'); /* Fallback for even older browsers */
-  font-weight: 400; /* Or the actual weight of your Alata-Regular file */
-  font-style: normal;
-  font-display: swap; /* Tells the browser how to display text while the font is loading */
+.netflix-portfolio .animate-slide-up {
+  animation: netflixSlideUp 1s ease-out forwards;
+  opacity: 0;
+  transform: translateY(30px);
 }
-.font-alata {
-  font-family: 'Alata', sans-serif;
+
+.netflix-portfolio .animate-glow {
+  animation: netflixGlow 2s ease-in-out infinite alternate;
+}
+
+.netflix-portfolio .animate-pulse-glow {
+  animation: netflixPulseGlow 2s ease-in-out infinite;
+}
+
+.netflix-portfolio .line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.netflix-portfolio .hero-content > * {
+  opacity: 0;
+  animation: netflixFadeInUp 1s ease-out forwards;
+}
+
+.netflix-portfolio.loaded .hero-content > * {
+  animation-play-state: running;
+}
+
+/* Netflix Portfolio Keyframes */
+@keyframes netflixFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes netflixSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes netflixFadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes netflixGlow {
+  from {
+    text-shadow: 0 0 5px #ef4444, 0 0 10px #ef4444, 0 0 15px #ef4444;
+  }
+  to {
+    text-shadow: 0 0 10px #ef4444, 0 0 20px #ef4444, 0 0 30px #ef4444;
+  }
+}
+
+@keyframes netflixPulseGlow {
+  0%,
+  100% {
+    box-shadow: 0 0 5px rgba(239, 68, 68, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.8), 0 0 30px rgba(239, 68, 68, 0.6);
+  }
+}
+
+/* Optimized Floating 3D Shapes - Desktop Only */
+@media (min-width: 1024px) {
+  .netflix-portfolio .floating-shapes {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    will-change: transform;
+  }
+
+  .netflix-portfolio .shape {
+    position: absolute;
+    background: linear-gradient(45deg, rgba(239, 68, 68, 0.1), rgba(236, 72, 153, 0.1));
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    will-change: transform;
+  }
+
+  .netflix-portfolio .shape-1 {
+    width: 200px;
+    height: 200px;
+    top: 20%;
+    right: 10%;
+    animation: netflixFloat1 20s ease-in-out infinite;
+    transform-style: preserve-3d;
+  }
+
+  .netflix-portfolio .shape-2 {
+    width: 150px;
+    height: 150px;
+    top: 60%;
+    right: 20%;
+    animation: netflixFloat2 25s ease-in-out infinite;
+    transform-style: preserve-3d;
+  }
+
+  .netflix-portfolio .shape-3 {
+    width: 100px;
+    height: 100px;
+    top: 40%;
+    right: 5%;
+    animation: netflixFloat3 15s ease-in-out infinite;
+    transform-style: preserve-3d;
+  }
+}
+
+@keyframes netflixFloat1 {
+  0%,
+  100% {
+    transform: translateY(0px) rotateX(0deg) rotateY(0deg);
+  }
+  25% {
+    transform: translateY(-20px) rotateX(10deg) rotateY(10deg);
+  }
+  50% {
+    transform: translateY(-40px) rotateX(20deg) rotateY(20deg);
+  }
+  75% {
+    transform: translateY(-20px) rotateX(10deg) rotateY(10deg);
+  }
+}
+
+@keyframes netflixFloat2 {
+  0%,
+  100% {
+    transform: translateY(0px) rotateX(0deg) rotateZ(0deg);
+  }
+  33% {
+    transform: translateY(-30px) rotateX(15deg) rotateZ(5deg);
+  }
+  66% {
+    transform: translateY(-15px) rotateX(-10deg) rotateZ(-5deg);
+  }
+}
+
+@keyframes netflixFloat3 {
+  0%,
+  100% {
+    transform: translateY(0px) rotateY(0deg) rotateZ(0deg);
+  }
+  50% {
+    transform: translateY(-25px) rotateY(180deg) rotateZ(10deg);
+  }
+}
+
+/* Enhanced Project Cards */
+.netflix-portfolio .project-card {
+  background: linear-gradient(145deg, rgba(17, 17, 17, 0.8), rgba(23, 23, 23, 0.9));
+  border: 1px solid rgba(55, 55, 55, 0.3);
+  backdrop-filter: blur(10px);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+.netflix-portfolio .project-card:hover {
+  border-color: rgba(239, 68, 68, 0.5);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(239, 68, 68, 0.1), inset 0 1px 0
+    rgba(255, 255, 255, 0.1);
+}
+
+/* Netflix Portfolio Custom scrollbar */
+.netflix-portfolio ::-webkit-scrollbar {
+  width: 8px;
+}
+
+.netflix-portfolio ::-webkit-scrollbar-track {
+  background: #111;
+}
+
+.netflix-portfolio ::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #ef4444, #dc2626);
+  border-radius: 4px;
+}
+
+.netflix-portfolio ::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, #f87171, #ef4444);
+}
+
+/* Netflix Portfolio Smooth scrolling */
+.netflix-portfolio {
+  scroll-behavior: smooth;
+}
+
+/* Enhanced button animations for Netflix Portfolio */
+.netflix-portfolio button {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.netflix-portfolio button:hover {
+  transform: translateY(-2px);
+}
+
+.netflix-portfolio button:active {
+  transform: translateY(0);
+}
+
+/* Optimized loading animation for images in Netflix Portfolio */
+.netflix-portfolio img {
+  transition: opacity 0.5s ease;
+}
+
+.netflix-portfolio img[src*="placeholder"] {
+  background: linear-gradient(90deg, #333 25%, #444 50%, #333 75%);
+  background-size: 200% 100%;
+  animation: netflixShimmer 2s infinite;
+}
+
+@keyframes netflixShimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Enhanced focus states for accessibility in Netflix Portfolio */
+.netflix-portfolio button:focus-visible,
+.netflix-portfolio a:focus-visible {
+  outline: 2px solid #ef4444;
+  outline-offset: 2px;
+}
+
+/* Reduced motion support for Netflix Portfolio */
+@media (prefers-reduced-motion: reduce) {
+  .netflix-portfolio *,
+  .netflix-portfolio *::before,
+  .netflix-portfolio *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .netflix-portfolio .floating-shapes,
+  .netflix-portfolio .animate-bounce,
+  .netflix-portfolio .animate-pulse,
+  .netflix-portfolio .animate-ping {
+    animation: none !important;
+  }
+}
+
+/* Mobile optimizations for Netflix Portfolio */
+@media (max-width: 768px) {
+  .netflix-portfolio .hero-content h1 {
+    font-size: 2.5rem;
+    line-height: 1.1;
+  }
+
+  .netflix-portfolio .floating-shapes {
+    display: none;
+  }
+
+  /* Reduce particle count on mobile */
+  .netflix-portfolio canvas {
+    opacity: 0.1 !important;
+  }
+
+  /* Optimize animations for mobile */
+  .netflix-portfolio .project-card {
+    transition: all 0.3s ease;
+  }
+
+  .netflix-portfolio .group:hover .project-card {
+    transform: none;
+  }
+}
+
+/* Tablet optimizations for Netflix Portfolio */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .netflix-portfolio .shape {
+    transform: scale(0.8);
+  }
+
+  .netflix-portfolio canvas {
+    opacity: 0.2 !important;
+  }
+}
+
+/* Desktop enhancements for Netflix Portfolio */
+@media (min-width: 1024px) {
+  .netflix-portfolio .group:hover .project-card {
+    z-index: 10;
+    transform: translateY(-12px) scale(1.03);
+  }
+
+  /* Enable 3D effects only on desktop */
+  @supports (transform-style: preserve-3d) {
+    .netflix-portfolio .project-card:hover {
+      transform: translateY(-12px) scale(1.03) rotateX(5deg);
+      transform-style: preserve-3d;
+    }
+  }
+}
+
+/* Performance optimizations for Netflix Portfolio */
+.netflix-portfolio .will-change-transform {
+  will-change: transform;
+}
+
+.netflix-portfolio .will-change-opacity {
+  will-change: opacity;
+}
+
+/* GPU acceleration for smooth animations */
+.netflix-portfolio .gpu-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Optimize repaints */
+.netflix-portfolio .no-select {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* High contrast mode support for Netflix Portfolio */
+@media (prefers-contrast: high) {
+  .netflix-portfolio .project-card {
+    border: 2px solid #fff;
+  }
+
+  .netflix-portfolio .text-gray-400 {
+    color: #ccc;
+  }
+}
+
+/* Netflix Portfolio specific gradient text effect */
+.netflix-portfolio .text-red-600 {
+  background: linear-gradient(45deg, #dc2626, #ef4444);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Netflix Portfolio particle trail effect */
+.netflix-portfolio .particle-trail {
+  position: relative;
+  overflow: hidden;
+}
+
+.netflix-portfolio .particle-trail::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(239, 68, 68, 0.4), transparent);
+  animation: netflixParticleTrail 2s infinite;
+}
+
+@keyframes netflixParticleTrail {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+/* Netflix Portfolio 3D card flip effect */
+.netflix-portfolio .card-3d {
+  perspective: 1000px;
+}
+
+.netflix-portfolio .card-3d-inner {
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+
+.netflix-portfolio .card-3d:hover .card-3d-inner {
+  transform: rotateY(180deg);
+}
+
+/* Netflix Portfolio advanced loading states */
+.netflix-portfolio .skeleton {
+  background: linear-gradient(90deg, #333 25%, #444 50%, #333 75%);
+  background-size: 200% 100%;
+  animation: netflixSkeletonLoading 1.5s infinite;
+}
+
+@keyframes netflixSkeletonLoading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Netflix Portfolio text gradient animations */
+.netflix-portfolio .gradient-text {
+  background: linear-gradient(45deg, #ef4444, #ec4899, #8b5cf6);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: netflixGradientShift 3s ease infinite;
+}
+
+@keyframes netflixGradientShift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Netflix Portfolio neon glow effects */
+.netflix-portfolio .neon-red {
+  box-shadow: 0 0 5px #ef4444, 0 0 10px #ef4444, 0 0 20px #ef4444, 0 0 40px #ef4444;
+}
+
+/* Netflix Portfolio glass morphism effects */
+.netflix-portfolio .glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+:root {
+  --radius: 0.625rem;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }
