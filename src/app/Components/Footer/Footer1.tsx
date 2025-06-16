@@ -24,7 +24,7 @@ export default function Footer() {
               your.email@example.com
             </a>
           </p>
-          <p className="mb-2 flex items-center gap-2">
+          <p className="mb-2 flex items-center gap-2 sm:items-center">
             <FaPhone />
             +91-9876543210
           </p>
