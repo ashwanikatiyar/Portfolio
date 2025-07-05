@@ -260,7 +260,7 @@ export default function AboutPage() {
                   variant="ghost"
                   size="icon"
                   className="w-12 h-12 rounded-full border border-gray-600 hover:border-red-500 transition-all duration-200 hover:scale-110"
-                  onClick={() => window.open("tel:8542837143")}
+                  onClick={() => window.open("tel:85XXXXXXXX")}
                 >
                   <Phone className="w-6 h-6" />
                 </Button>

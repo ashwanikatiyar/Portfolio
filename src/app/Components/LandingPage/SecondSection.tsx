@@ -8,7 +8,7 @@ const profiles = [
     name: "The Talent Scout",
     image: "/Profiles/netflix-profile-pictures-5yup5hd2i60x7ew3.jpg",
     locked: false,
-    path: "/hiring-manager",
+    path: "/Home",
     description:
       "For recruiters and HR professionals actively seeking candidates",
   },
@@ -17,7 +17,7 @@ const profiles = [
     image:
       "/Profiles/netflix-profile-pictures-1000-x-1000-62wgyitks6f4l79m.jpg",
     locked: false,
-    path: "/team-lead",
+    path: "/Home",
     description:
       "For hiring managers or founders looking to build a team or a new product",
   },
@@ -26,7 +26,7 @@ const profiles = [
     image:
       "/Profiles/netflix-profile-pictures-1000-x-1000-88wkdmjrorckekha.jpg",
     locked: false,
-    path: "/recruiter",
+    path: "/Home",
     description:
       "For team leads or fellow developers interested in joint projects",
   },
@@ -35,7 +35,7 @@ const profiles = [
     image:
       "/Profiles/netflix-profile-pictures-1000-x-1000-qo9h82134t9nv0j0.jpg",
     isChildren: false,
-    path: "/hr-panel",
+    path: "/Home",
     description: "For anyone exploring new possibilities or partnerships",
   },
 ];
