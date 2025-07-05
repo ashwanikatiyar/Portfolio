@@ -6,7 +6,7 @@ import { Html } from "@react-three/drei";
 import { Canvas, useFrame, useLoader } from "@react-three/fiber";
 import { OrbitControls, MeshReflectorMaterial } from "@react-three/drei";
 import * as THREE from "three";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import { GLTFLoader } from "three-stdlib";
 import SecondSection from "./SecondSection";
 import Footer from "../Footer/Footer1";
 import Lamp from "./Lamp"; // adjust the path if needed
@@ -27,7 +27,7 @@ function Model({
   isUserRotating: boolean;
   scrollScale: number;
 }) {
-  const gltf = useLoader<GLTFResult>(GLTFLoader, MODEL_PATH);
+  const gltf = useLoader(GLTFLoader, MODEL_PATH);
   const modelRef = useRef<THREE.Object3D>(null);
 
 
