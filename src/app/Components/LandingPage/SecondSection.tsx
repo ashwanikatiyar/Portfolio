@@ -176,7 +176,23 @@ export default function SecondSection() {
                           ×
                         </button>
                       )}
-                      <strong>{profile.name}:</strong> {profile.description}
+                      <div className="flex flex-col items-center text-center">
+                        <strong>{profile.name}:</strong> {profile.description}
+                        {/* ---- Mobile Only: "Let's Go" button ---- */}
+                        {isMobile && (
+                          <button
+                            className="mt-4 bg-black text-white px-6 py-2 rounded-full font-semibold text-sm shadow-lg hover:bg-gray-900 transition"
+                            onClick={() => {
+                              // console.log("Let's Go clicked");
+                              // You can add router.push() later
+                              
+                              handleProfileClick(profile)
+                            }}
+                          >
+                            Let's Go
+                          </button>
+                        )}
+                      </div>
                     </motion.div>
                   )}
                 </AnimatePresence>

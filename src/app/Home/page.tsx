@@ -1,26 +1,38 @@
-"use client"
+"use client";
 
-import type React from "react"
-import { useState, useRef, useEffect, useCallback, memo } from "react"
-import { Play, Info, VolumeX, Volume2, Github, ExternalLink, Star, Zap, Menu, X } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import Footer from "../Components/Footer/Footer1"
+import type React from "react";
+import { useState, useRef, useEffect, useCallback, memo } from "react";
+import {
+  Play,
+  Info,
+  VolumeX,
+  Volume2,
+  Github,
+  ExternalLink,
+  Star,
+  Zap,
+  Menu,
+  X,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import Footer from "../Components/Footer/Footer1";
+import { Router } from "react-router-dom";
 
 interface Project {
-  id: string
-  title: string
-  description: string
-  year: string
-  duration: string
-  rating: string
-  category: string
-  thumbnail: string
-  video?: string
-  technologies: string[]
-  liveUrl?: string
-  githubUrl?: string
-  featured?: boolean
-  color: string
+  id: string;
+  title: string;
+  description: string;
+  year: string;
+  duration: string;
+  rating: string;
+  category: string;
+  thumbnail: string;
+  video?: string;
+  technologies: string[];
+  liveUrl?: string;
+  githubUrl?: string;
+  featured?: boolean;
+  color: string;
 }
 
 const projects: Project[] = [
@@ -34,7 +46,8 @@ const projects: Project[] = [
     rating: "95% Match",
     category: "Web Development",
     thumbnail: "/Project/Front-Flights.png",
-    video: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
+    video:
+      "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
     technologies: ["Next.js", "TypeScript", "Stripe", "PostgreSQL", "AI/ML"],
     liveUrl: "https://www.tripclap.com/partner/frontflights-llc",
     githubUrl: "https://github.com/ashwanikatiyar/Digixito_Projects",
@@ -80,13 +93,13 @@ const projects: Project[] = [
     duration: "1 month",
     rating: "92% Match",
     category: "3D/Animation",
-    thumbnail: "",
+    thumbnail: "/Project/Portfolio.png",
     technologies: ["Three.js", "React", "GSAP", "Blender", "WebGL"],
     liveUrl: "https://ashwanis-portfolio.onrender.com",
     githubUrl: "https://ashwanis-portfolio.onrender.com",
     color: "#a8e6cf",
   },
-  
+
   {
     id: "5",
     title: "Data Visualization Dashboard",
@@ -96,125 +109,133 @@ const projects: Project[] = [
     duration: "2 months",
     rating: "87% Match",
     category: "Data Science",
-    thumbnail: "",
+    thumbnail: "/Project/VAIdashboard.png",
     technologies: ["D3.js", "Python", "FastAPI", "PostgreSQL", "ML"],
     liveUrl: "https://valleyai.io/",
     githubUrl: "https://valleyai.io/",
     color: "#ff8a80",
   },
-]
+];
 
 export default function NetflixPortfolio() {
-  const [isMuted, setIsMuted] = useState(true)
-  const [hoveredCard, setHoveredCard] = useState<string | null>(null)
-  const [isLoaded, setIsLoaded] = useState(false)
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const [isVideoLoaded, setIsVideoLoaded] = useState(false)
-  const [scrollY, setScrollY] = useState(0)
+  const [isMuted, setIsMuted] = useState(true);
+  const [hoveredCard, setHoveredCard] = useState<string | null>(null);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isVideoLoaded, setIsVideoLoaded] = useState(false);
+  const [scrollY, setScrollY] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
 
-  const videoRef = useRef<HTMLVideoElement>(null)
-  const heroRef = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const heroRef = useRef<HTMLDivElement>(null);
 
   // Memoized arrays to prevent unnecessary re-renders
-  const popularProjects = projects.slice(0, 3)
-  const personalProjects = projects.slice(2, 5)
-  const featuredProject = projects[0]
+  const popularProjects = projects.slice(0, 3);
+  const personalProjects = projects.slice(2, 5);
+  const featuredProject = projects[0];
 
   // Optimized scroll handler with throttling
   useEffect(() => {
-    let ticking = false
+    let ticking = false;
 
     const handleScroll = () => {
       if (!ticking) {
         requestAnimationFrame(() => {
-          setScrollY(window.scrollY)
-          ticking = false
-        })
-        ticking = true
+          setScrollY(window.scrollY);
+          ticking = false;
+        });
+        ticking = true;
       }
-    }
+    };
 
-    window.addEventListener("scroll", handleScroll, { passive: true })
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   useEffect(() => {
-    setIsLoaded(true)
-  }, [])
+    setIsLoaded(true);
+  }, []);
 
   // Optimized video functionality
   useEffect(() => {
-    const video = videoRef.current
-    if (!video || !featuredProject.video) return
+    const video = videoRef.current;
+    if (!video || !featuredProject.video) return;
 
     const handleLoadedMetadata = () => {
-      setIsVideoLoaded(true)
-    }
+      setIsVideoLoaded(true);
+    };
 
     const handleCanPlay = async () => {
-      setIsVideoLoaded(true)
+      setIsVideoLoaded(true);
       try {
-        await video.play()
+        await video.play();
       } catch (error) {
-        video.muted = true
-        setIsMuted(true)
+        video.muted = true;
+        setIsMuted(true);
         try {
-          await video.play()
+          await video.play();
         } catch (mutedError) {
-          console.warn("Video autoplay failed")
+          console.warn("Video autoplay failed");
         }
       }
-    }
+    };
 
     const handleError = () => {
-      setIsVideoLoaded(false)
-    }
+      setIsVideoLoaded(false);
+    };
 
-    video.muted = isMuted
-    video.playsInline = true
-    video.loop = true
-    video.preload = "metadata"
+    video.muted = isMuted;
+    video.playsInline = true;
+    video.loop = true;
+    video.preload = "metadata";
 
-    video.addEventListener("loadedmetadata", handleLoadedMetadata)
-    video.addEventListener("canplay", handleCanPlay)
-    video.addEventListener("error", handleError)
+    video.addEventListener("loadedmetadata", handleLoadedMetadata);
+    video.addEventListener("canplay", handleCanPlay);
+    video.addEventListener("error", handleError);
 
-    video.src = featuredProject.video
-    video.load()
+    video.src = featuredProject.video;
+    video.load();
 
     return () => {
-      video.removeEventListener("loadedmetadata", handleLoadedMetadata)
-      video.removeEventListener("canplay", handleCanPlay)
-      video.removeEventListener("error", handleError)
-    }
-  }, [featuredProject.video])
+      video.removeEventListener("loadedmetadata", handleLoadedMetadata);
+      video.removeEventListener("canplay", handleCanPlay);
+      video.removeEventListener("error", handleError);
+    };
+  }, [featuredProject.video]);
 
   useEffect(() => {
-    const video = videoRef.current
+    const video = videoRef.current;
     if (video && isVideoLoaded) {
-      video.muted = isMuted
+      video.muted = isMuted;
     }
-  }, [isMuted, isVideoLoaded])
+  }, [isMuted, isVideoLoaded]);
 
   const toggleMute = useCallback(async () => {
-    const video = videoRef.current
-    if (!video) return
+    const video = videoRef.current;
+    if (!video) return;
 
-    const newMutedState = !isMuted
+    const newMutedState = !isMuted;
     try {
-      video.muted = newMutedState
-      setIsMuted(newMutedState)
+      video.muted = newMutedState;
+      setIsMuted(newMutedState);
       if (!newMutedState && video.paused) {
-        await video.play()
+        await video.play();
       }
     } catch (error) {
-      console.error("Error toggling mute:", error)
+      console.error("Error toggling mute:", error);
     }
-  }, [isMuted])
+  }, [isMuted]);
 
   const toggleMobileMenu = useCallback(() => {
-    setIsMobileMenuOpen((prev) => !prev)
-  }, [])
+    setIsMobileMenuOpen((prev) => !prev);
+  }, []);
 
   const navigationItems = [
     { name: "Home", href: "#home" },
@@ -222,33 +243,37 @@ export default function NetflixPortfolio() {
     { name: "About", href: "/about" }, // Changed to route to about page
     { name: "Skills", href: "/about/#skills" },
     { name: "Contact", href: "#contact" },
-  ]
+  ];
 
   const handleNavClick = useCallback((href: string) => {
     if (href.startsWith("/")) {
       // Navigate to different page
-      window.location.href = href
+      window.location.href = href;
     } else {
       // Scroll to section
-      const element = document.querySelector(href)
+      const element = document.querySelector(href);
       if (element) {
-        element.scrollIntoView({ behavior: "smooth" })
+        element.scrollIntoView({ behavior: "smooth" });
       }
     }
-    setIsMobileMenuOpen(false)
-  }, [])
+    setIsMobileMenuOpen(false);
+  }, []);
 
   // Optimized hover handlers
   const handleCardHover = useCallback((id: string) => {
-    setHoveredCard(id)
-  }, [])
+    setHoveredCard(id);
+  }, []);
 
   const handleCardLeave = useCallback(() => {
-    setHoveredCard(null)
-  }, [])
+    setHoveredCard(null);
+  }, []);
 
   return (
-    <div className={`netflix-portfolio min-h-screen  bg-black text-white overflow-x-hidden ${isLoaded ? "loaded" : ""}`}>
+    <div
+      className={`netflix-portfolio min-h-screen  bg-black text-white overflow-x-hidden ${
+        isLoaded ? "loaded" : ""
+      }`}
+    >
       {/* Header */}
       <header className="fixed top-0 w-full z-40 transition-all duration-300 ease-out font-[alata]">
         <div
@@ -259,7 +284,9 @@ export default function NetflixPortfolio() {
         />
         <nav className="relative flex items-center justify-between px-4 md:px-8 lg:px-16 py-4">
           <div className="flex items-center space-x-8">
-            <h1 className="text-red-500 text-2xl font-bold tracking-wider">PORTFOLIO</h1>
+            <h1 className="text-red-500 text-2xl font-bold tracking-wider">
+              PORTFOLIO
+            </h1>
             <ul className="hidden md:flex space-x-6">
               {navigationItems.map((item) => (
                 <li key={item.name}>
@@ -293,7 +320,11 @@ export default function NetflixPortfolio() {
               onClick={toggleMobileMenu}
               aria-label="Toggle mobile menu"
             >
-              {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              {isMobileMenuOpen ? (
+                <X className="w-5 h-5" />
+              ) : (
+                <Menu className="w-5 h-5" />
+              )}
             </Button>
 
             <div className="relative">
@@ -323,7 +354,10 @@ export default function NetflixPortfolio() {
               </li>
             ))}
             <li className="pt-4 border-t border-gray-800">
-              <Button className="w-full bg-red-600 hover:bg-red-700" onClick={() => handleNavClick("#contact")}>
+              <Button
+                className="w-full bg-red-600 hover:bg-red-700"
+                onClick={() => handleNavClick("#contact")}
+              >
                 <Star className="w-4 h-4 mr-2" />
                 Hire Me
               </Button>
@@ -333,7 +367,11 @@ export default function NetflixPortfolio() {
       </header>
 
       {/* Hero Section */}
-      <section id="home" ref={heroRef} className="relative h-screen flex items-center overflow-hidden pt-30 sm:pt-0">
+      <section
+        id="home"
+        ref={heroRef}
+        className="relative h-screen flex items-center overflow-hidden pt-30 sm:pt-0"
+      >
         {/* Hero Background with Video */}
         <div className="absolute inset-0 z-10">
           <div className="relative w-full h-full overflow-hidden">
@@ -348,7 +386,9 @@ export default function NetflixPortfolio() {
                 playsInline
                 loop
                 style={{
-                  transform: `scale(${1 + scrollY * 0.0002}) translateY(${scrollY * 0.3}px)`,
+                  transform: `scale(${1 + scrollY * 0.0002}) translateY(${
+                    scrollY * 0.3
+                  }px)`,
                 }}
               >
                 <source src={featuredProject.video} type="video/mp4" />
@@ -362,7 +402,9 @@ export default function NetflixPortfolio() {
               }`}
               style={{
                 backgroundImage: `url(${featuredProject.thumbnail})`,
-                transform: `scale(${1 + scrollY * 0.0002}) translateY(${scrollY * 0.3}px)`,
+                transform: `scale(${1 + scrollY * 0.0002}) translateY(${
+                  scrollY * 0.3
+                }px)`,
               }}
             />
 
@@ -377,13 +419,19 @@ export default function NetflixPortfolio() {
             <div className="flex items-center space-x-3 text-sm font-[alata]">
               <div className="flex items-center space-x-2 bg-red-600/20 backdrop-blur-sm px-3 py-2 rounded-full border border-red-500/30">
                 <Zap className="w-4 h-4 text-red-400" />
-                <span className="text-red-400 font-semibold">FEATURED PROJECT</span>
+                <span className="text-red-400 font-semibold">
+                  FEATURED PROJECT
+                </span>
               </div>
-              <span className="text-gray-300 uppercase tracking-wider">{featuredProject.category}</span>
+              <span className="text-gray-300 uppercase tracking-wider">
+                {featuredProject.category}
+              </span>
             </div>
 
             <h1 className="text-4xl md:text-6xl lg:text-8xl font-black font-[ITC] leading-none tracking-tight">
-              <span className="inline-block">{featuredProject.title.split(" ")[0]}</span>
+              <span className="inline-block">
+                {featuredProject.title.split(" ")[0]}
+              </span>
               <br />
               <span className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-pink-500">
                 {featuredProject.title.split(" ").slice(1).join(" ")}
@@ -393,7 +441,9 @@ export default function NetflixPortfolio() {
             <div className="flex items-center space-x-6 text-sm">
               <div className="flex items-center space-x-2">
                 <div className="w-2 h-2 bg-green-500 rounded-full" />
-                <span className="text-green-400 font-bold">{featuredProject.rating}</span>
+                <span className="text-green-400 font-bold">
+                  {featuredProject.rating}
+                </span>
               </div>
               <span className="text-gray-300">{featuredProject.year}</span>
               <span className="text-gray-300">{featuredProject.duration}</span>
@@ -422,7 +472,7 @@ export default function NetflixPortfolio() {
               ))}
             </div>
 
-            <div className="flex items-center space-x-4 pt-6">
+            <div className="flex items-center space-x-4 py-6">
               <Button
                 className="bg-white text-black hover:bg-gray-200 px-8 py-4 text-lg font-bold rounded-full transition-all duration-200 hover:scale-105"
                 onClick={() => window.open(featuredProject.liveUrl, "_blank")}
@@ -432,21 +482,25 @@ export default function NetflixPortfolio() {
               </Button>
               <Button
                 variant="secondary"
-                className="bg-gray-800/50 backdrop-blur-sm hover:bg-gray-700/50 border border-gray-600 px-8 py-4 text-lg rounded-full transition-all duration-200 hover:scale-105"
+                className="bg-red-200 backdrop-blur-sm hover:bg-gray-700/50 border border-gray-600 px-8 py-4 text-lg font-extrabold text-red-500 rounded-full transition-all duration-200 hover:scale-105"
                 onClick={() => handleNavClick("#projects")}
               >
                 <Info className="w-6 h-6 mr-3" />
                 More Info
               </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="w-12 h-12 rounded-full border border-gray-600 hover:border-red-500 transition-all duration-200 hover:scale-110"
-                onClick={() => window.open(featuredProject.githubUrl, "_blank")}
-                aria-label="View on GitHub"
-              >
-                <Github className="w-6 h-6" />
-              </Button>
+              {!isMobile && (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="w-12 h-12 rounded-full border border-gray-600 hover:border-red-500 transition-all duration-200 hover:scale-110"
+                  onClick={() =>
+                    window.open(featuredProject.githubUrl, "_blank")
+                  }
+                  aria-label="View on GitHub"
+                >
+                  <Github className="w-6 h-6" />
+                </Button>
+              )}
             </div>
           </div>
         </div>
@@ -479,10 +533,15 @@ export default function NetflixPortfolio() {
       </section>
 
       {/* Popular Projects Section - Optimized */}
-      <section id="projects" className="relative px-4 md:px-8 lg:px-16 py-20 z-20 font-[alata]">
+      <section
+        id="projects"
+        className="relative px-4 md:px-8 lg:px-16 py-20 z-20 font-[alata]"
+      >
         <div className="flex items-center justify-between mb-12">
           <div>
-            <h2 className="text-3xl md:text-4xl font-bold mb-2">Popular Projects</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-2">
+              Popular Projects
+            </h2>
             <p className="text-gray-400">Trending in my portfolio</p>
           </div>
           <Button
@@ -511,7 +570,9 @@ export default function NetflixPortfolio() {
       <section className="relative px-4 md:px-8 lg:px-16 py-20 z-20 font-[alata]">
         <div className="flex items-center justify-between mb-12">
           <div>
-            <h2 className="text-3xl md:text-4xl font-bold mb-2">Personal Projects</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-2">
+              Personal Projects
+            </h2>
             <p className="text-gray-400">Passion projects and experiments</p>
           </div>
           <Button
@@ -537,7 +598,10 @@ export default function NetflixPortfolio() {
       </section>
 
       {/* Stats Section */}
-      <section id="about" className="relative px-4 md:px-8 lg:px-16 py-20 z-20 font-[alata]">
+      <section
+        id="about"
+        className="relative px-4 md:px-8 lg:px-16 py-20 z-20 font-[alata]"
+      >
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
           {[
             { number: "50+", label: "Projects Completed" },
@@ -546,23 +610,47 @@ export default function NetflixPortfolio() {
             { number: "99%", label: "Client Satisfaction" },
           ].map((stat, index) => (
             <div key={index} className="space-y-2">
-              <div className="text-3xl md:text-4xl font-bold text-red-400">{stat.number}</div>
-              <div className="text-gray-400 text-sm uppercase tracking-wider">{stat.label}</div>
+              <div className="text-3xl md:text-4xl font-bold text-red-400">
+                {stat.number}
+              </div>
+              <div className="text-gray-400 text-sm uppercase tracking-wider">
+                {stat.label}
+              </div>
             </div>
           ))}
         </div>
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="relative px-4 md:px-8 lg:px-16 py-20 z-20 font-[ITC]">
+      <section
+        id="contact"
+        className="relative px-4 md:px-8 lg:px-16 py-20 z-20 font-[ITC]"
+      >
         <div className="text-center space-y-8">
-          <h2 className="text-3xl md:text-4xl font-bold">Let's Work Together</h2>
+          <h2 className="text-3xl md:text-4xl font-bold">
+            Let's Work Together
+          </h2>
           <p className="text-gray-400 max-w-2xl mx-auto">
-            Ready to bring your ideas to life? Let's discuss your next project and create something amazing together.
+            Ready to bring your ideas to life? Let's discuss your next project
+            and create something amazing together.
           </p>
+          {/* <Button
+            size="lg"
+            className="bg-red-600 hover:bg-red-200 hover:text-red-500  px-8 py-4 text-lg font-bold rounded-full transition-all duration-200 hover:scale-105 active:bg-red-200 active:text-red-500"
+            onClick={() => window.open("https://docs.google.com/forms/d/e/1FAIpQLScwe_5KT-YFdUsZzZAQromTQpdjl-fKfkLK2qq8a23OeL_oMg/viewform?usp=header")}
+          >
+            Get In Touch
+          </Button> */}
+
           <Button
             size="lg"
-            className="bg-red-600 hover:bg-red-700 px-8 py-4 text-lg font-bold rounded-full transition-all duration-200 hover:scale-105"
+            className="bg-red-600 hover:bg-red-200 hover:text-red-500 px-8 py-4 text-lg font-bold rounded-full transition-all duration-200 hover:scale-105 active:bg-red-200 active:text-red-500 
+             animate-bubble"
+            onClick={() =>
+              window.open(
+                "https://docs.google.com/forms/d/e/1FAIpQLScwe_5KT-YFdUsZzZAQromTQpdjl-fKfkLK2qq8a23OeL_oMg/viewform?usp=header"
+              )
+            }
           >
             Get In Touch
           </Button>
@@ -571,34 +659,44 @@ export default function NetflixPortfolio() {
 
       <Footer />
     </div>
-  )
+  );
 }
 
 interface ProjectCardProps {
-  project: Project
-  index: number
-  isHovered: boolean
-  onHover: () => void
-  onLeave: () => void
+  project: Project;
+  index: number;
+  isHovered: boolean;
+  onHover: () => void;
+  onLeave: () => void;
 }
 
 // Optimized ProjectCard with reduced animations
-const ProjectCard = memo(function ProjectCard({ project, index, isHovered, onHover, onLeave }: ProjectCardProps) {
-  const [imageLoaded, setImageLoaded] = useState(false)
-  const [imageError, setImageError] = useState(false)
+const ProjectCard = memo(function ProjectCard({
+  project,
+  index,
+  isHovered,
+  onHover,
+  onLeave,
+}: ProjectCardProps) {
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageError, setImageError] = useState(false);
 
   const handleImageError = useCallback(() => {
-    setImageError(true)
-    setImageLoaded(true)
-  }, [])
+    setImageError(true);
+    setImageLoaded(true);
+  }, []);
 
   const handleImageLoad = useCallback(() => {
-    setImageLoaded(true)
-    setImageError(false)
-  }, [])
+    setImageLoaded(true);
+    setImageError(false);
+  }, []);
 
   return (
-    <div className="relative group" onMouseEnter={onHover} onMouseLeave={onLeave}>
+    <div
+      className="relative group"
+      onMouseEnter={onHover}
+      onMouseLeave={onLeave}
+    >
       <div className="relative overflow-hidden rounded-2xl project-card h-full flex flex-col transform transition-transform duration-200 hover:scale-102">
         {/* Card Background */}
         <div
@@ -609,7 +707,11 @@ const ProjectCard = memo(function ProjectCard({ project, index, isHovered, onHov
         {/* Image - Fixed Height */}
         <div className="relative overflow-hidden h-56 md:h-64 flex-shrink-0">
           <img
-            src={imageError ? "/placeholder.svg?height=400&width=700" : project.thumbnail}
+            src={
+              imageError
+                ? "/placeholder.svg?height=400&width=700"
+                : project.thumbnail
+            }
             alt={project.title}
             className={`w-full h-full object-cover transition-transform duration-200 group-hover:scale-105 ${
               imageLoaded ? "opacity-100" : "opacity-0"
@@ -632,7 +734,9 @@ const ProjectCard = memo(function ProjectCard({ project, index, isHovered, onHov
           <div className="absolute top-4 right-4">
             <div className="flex items-center space-x-1 bg-green-500/20 backdrop-blur-sm px-2 py-1 rounded-full border border-green-500/30">
               <Star className="w-3 h-3 text-green-400 fill-current" />
-              <span className="text-green-400 text-xs font-bold">{project.rating.split("%")[0]}%</span>
+              <span className="text-green-400 text-xs font-bold">
+                {project.rating.split("%")[0]}%
+              </span>
             </div>
           </div>
         </div>
@@ -652,7 +756,9 @@ const ProjectCard = memo(function ProjectCard({ project, index, isHovered, onHov
             </div>
 
             <div className="min-h-[4.5rem]">
-              <p className="text-gray-300 text-sm leading-relaxed line-clamp-3">{project.description}</p>
+              <p className="text-gray-300 text-sm leading-relaxed line-clamp-3">
+                {project.description}
+              </p>
             </div>
           </div>
 
@@ -666,7 +772,9 @@ const ProjectCard = memo(function ProjectCard({ project, index, isHovered, onHov
               </span>
             ))}
             {project.technologies.length > 3 && (
-              <span className="text-gray-400 text-xs self-center">+{project.technologies.length - 3} more</span>
+              <span className="text-gray-400 text-xs self-center">
+                +{project.technologies.length - 3} more
+              </span>
             )}
           </div>
         </div>
@@ -680,12 +788,17 @@ const ProjectCard = memo(function ProjectCard({ project, index, isHovered, onHov
           <div className="text-center space-y-4">
             <div className="space-y-2">
               <h3 className="text-2xl font-bold">{project.title}</h3>
-              <p className="text-gray-300 text-sm line-clamp-4">{project.description}</p>
+              <p className="text-gray-300 text-sm line-clamp-4">
+                {project.description}
+              </p>
             </div>
 
             <div className="flex flex-wrap justify-center gap-2">
               {project.technologies.map((tech) => (
-                <span key={tech} className="bg-gray-700/50 px-3 py-1 rounded-full text-xs border border-gray-600">
+                <span
+                  key={tech}
+                  className="bg-gray-700/50 px-3 py-1 rounded-full text-xs border border-gray-600"
+                >
                   {tech}
                 </span>
               ))}
@@ -696,9 +809,9 @@ const ProjectCard = memo(function ProjectCard({ project, index, isHovered, onHov
                 size="sm"
                 className="bg-red-600 hover:bg-red-700 transition-all duration-200"
                 onClick={(e: React.MouseEvent) => {
-                  e.stopPropagation()
+                  e.stopPropagation();
                   if (project.liveUrl) {
-                    window.open(project.liveUrl, "_blank")
+                    window.open(project.liveUrl, "_blank");
                   }
                 }}
               >
@@ -710,9 +823,9 @@ const ProjectCard = memo(function ProjectCard({ project, index, isHovered, onHov
                 variant="secondary"
                 className="bg-gray-700 hover:bg-gray-600 transition-all duration-200"
                 onClick={(e: React.MouseEvent) => {
-                  e.stopPropagation()
+                  e.stopPropagation();
                   if (project.githubUrl) {
-                    window.open(project.githubUrl, "_blank")
+                    window.open(project.githubUrl, "_blank");
                   }
                 }}
               >
@@ -724,5 +837,5 @@ const ProjectCard = memo(function ProjectCard({ project, index, isHovered, onHov
         </div>
       </div>
     </div>
-  )
-})
+  );
+});

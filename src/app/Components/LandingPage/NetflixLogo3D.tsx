@@ -114,6 +114,7 @@ export default function NetflixLogo3D() {
       if (audioRef.current) {
         audioRef.current.pause();
         audioRef.current.currentTime = 0;
+        console.log("AUDIO IS PLAYING")
         const playPromise = audioRef.current.play();
         if (playPromise !== undefined) {
           playPromise.catch((err) => {
@@ -121,13 +122,31 @@ export default function NetflixLogo3D() {
           });
         }
       }
-    }, 450);
+    }, 3050);
     return () => clearTimeout(timer);
   }, []);
 
+  // const handleMobileTap = (e: React.TouchEvent<HTMLDivElement>) => {
+  //   setIsUserRotating(true);
+  // };
+
+
+  const [hasInteracted, setHasInteracted] = useState(false); // Track user interaction
+
   const handleMobileTap = (e: React.TouchEvent<HTMLDivElement>) => {
-    setIsUserRotating(true);
-  };
+  setIsUserRotating(true);
+  if (!hasInteracted) {
+    setHasInteracted(true); // Mark as interacted
+    if (audioRef.current) {
+      const playPromise = audioRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise.catch((err) => {
+          console.warn("Autoplay failed:", err);
+        });
+      }
+    }
+  }
+};
 
   return (
     <>
@@ -207,7 +226,7 @@ export default function NetflixLogo3D() {
       <Footer />
       <audio
         ref={audioRef}
-        src="/Netflix-Intro-Sound-Effect.mp3"
+        src="/Netflix-Intro-Sound-Effect.mp3" 
         preload="auto"
       />
     </>

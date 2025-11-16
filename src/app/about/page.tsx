@@ -51,7 +51,7 @@ export default function AboutPage() {
       location: "Dallas, Texas | Remote",
       period: "Jul 2025 - Present",
       description: [
-        "Building and maintaining scalable, user-centric web applications using Next.js and TypeScript",
+        "Building and maintaining scalable backend systems using NestJS and user-centric web applications using Next.js and TypeScript",
         "Collaborating with cross-functional teams across time zones to deliver reliable, high-performance solutions",
         "Supporting agile practices through sprint planning, code reviews, and participation in technical architecture discussions",
       ],
@@ -122,26 +122,23 @@ export default function AboutPage() {
     "Backend Development": [
       "Nest.js",
       "Express.js",
-      "Spring Boot",
       "RESTful API",
       "Microservices",
       "WebSockets",
-      "Event-Driven Architecture",
     ],
     "Frontend & UI": ["Next.js", "React.js", "TypeScript", "JavaScript", "HTML", "CSS", "Figma"],
     "AI & Machine Learning": ["Natural Language Processing (NLP)", "Deep Learning", "TensorFlow", "OpenAI APIs"],
-    "Cloud & DevOps": [
+    "Cloud & DevOps ( LEARNING STAGE )": [
       "AWS (EC2, S3)",
-      "Google Cloud Platform (GCP)",
-      "Azure DevOps",
       "Docker",
       "Kubernetes",
       "CI/CD Pipelines",
       "Git",
       "GitHub Actions",
     ],
-    "Database Management": ["PostgreSQL", "MySQL", "MongoDB", "Redis", "Firebase"],
-    "Programming Languages": ["Java", "Python", "C/C++", "TypeScript", "JavaScript"],
+    "Database Management": ["PostgreSQL", "MySQL", "MongoDB", "Firebase"],
+    "Programming Languages": ["TypeScript","JavaScript", "Java", "Python", "C# and C++"],
+    "Game Development ( LEARNING STAGE )" : ["C#" , "Unity 3D" , "Unity 2D" , "Blender3D" , "Physics"]
   }
 
   return (

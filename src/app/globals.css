@@ -335,3 +335,25 @@
     cursor: auto !important;
   }
 }
+
+
+@layer utilities {
+  @keyframes bubble {
+    0%, 100% {
+      transform: scale(1);
+      border-radius: 9999px;
+    }
+    40% {
+      transform: scale(1.5) rotate(2.5deg);
+      border-radius: 48px;
+    }
+    70% {
+      transform: scale(1.5) rotate(-2.75deg);
+      border-radius: 9999px;
+    }
+  }
+
+  .animate-bubble {
+    animation: bubble 2.5s ease-in-out infinite;
+  }
+}
